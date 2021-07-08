@@ -1,0 +1,37 @@
+version: '3.1'
+
+services:
+
+  standalone:
+    image: apachepulsar/pulsar:2.7.2
+    container_name: pulsar
+    hostname: pulsar
+    ports:
+      - "8080:8080"
+      - "6650:6650"
+    environment:
+      - BOOKIE_MEM=" -Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g"
+    volumes:
+      - pulsardata:/pulsar/data
+      - pulsarconf:/pulsar/conf
+    command: /bin/bash -c "bin/apply-config-from-env.py conf/standalone.conf && bin/pulsar standalone --advertised-address standalone"
+    networks:
+      - network_test
+  dashboard:
+    image: apachepulsar/pulsar-dashboard
+    depends_on:
+      - standalone
+    ports:
+      - "80:80"
+    environment:
+      - SERVICE_URL=http://standalone:8080
+    networks:
+      - network_test
+volumes:
+  pulsardata:
+  pulsarconf:
+
+networks:
+  network_test:
+    name: network_test
+    driver: bridge

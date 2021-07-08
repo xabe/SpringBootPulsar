@@ -1,0 +1,25 @@
+server:
+  servlet:
+    context-path: /
+  port: 9080
+logging:
+  level:
+    root: INFO
+    com.xabe.spring: INFO
+    org.springframework.core.log: DEBUG
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: producer
+  pulsar:
+    service-url: "pulsar://localhost:6650"
+    io-threads: 10
+    listener-threads: 10
+    enable-tcp-no-delay: false
+    keep-alive-interval-sec: 20
+    connection-timeout-sec: 10
+    operation-timeout-sec: 15
+    starting-backoff-interval-ms: 100
+    max-backoff-interval-sec: 10
